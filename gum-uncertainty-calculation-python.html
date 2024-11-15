@@ -7520,7 +7520,7 @@ a.anchor-link {
 <p>Packages installed (you may change <code>mamba</code> to <code>conda</code>):</p>
 <pre><code>mamba install -c conda-forge jupyterlab numpy matplotlib scienceplots watermark ipympl uncertainties scipy
 </code></pre>
-<p>Alternatively, use the provided <code>yml</code> file:</p>
+<p>Alternatively, use the provided <code>yml</code> file and change the <code>ENV_NAME</code> to your desire, e.g. <code>gum</code>:</p>
 <pre><code>mamba env create -n ENV_NAME -f environment.yml
 </code></pre>
 <p>This notebook should work top down by running each cell interactively. Alternatively, use "Run All Cells" once and read through the document; you can still play with the values in the code cells.</p>
@@ -7657,10 +7657,10 @@ CPU cores   : 16
 Architecture: 64bit
 
 matplotlib   : 3.9.2
-uncertainties: 3.2.2
-scienceplots : 2.1.1
 scipy        : 1.14.1
 numpy        : 2.1.3
+uncertainties: 3.2.2
+scienceplots : 2.1.1
 
 </pre>
 </div>
@@ -7873,7 +7873,7 @@ numpy        : 2.1.3
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Expanded uncertainty (normal distribution)</strong><br/>
 $U(t) = k_p\cdot u(t)$</p>
-<p>See also Table G.1.</p>
+<p>See also <strong>Table G.1</strong>.</p>
 </div>
 </div>
 </div>
@@ -8061,11 +8061,12 @@ That is, if no other information is given, we can assume a normal distribution.<
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Expanded uncertainty (Student's t distribution)</strong></p>
-<p>For a small number of measurements (<em>Todo</em>: how to do decide this objectively?), it may be more appropriate to use the $t$ distribution.</p>
+<p><strong>Expanded uncertainty (Student's $t$ distribution)</strong></p>
+<p>For a small number of measurements, it may be more appropriate to use the $t$ distribution.<br/>
+For large $n$, the <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">$t$ distribution</a> approximates the normal distribution. Therefore, it should be valid in all cases (?).</p>
 <p>$U(t) = k_p\cdot u(t) \approx t_p(v)\cdot u(t)$ with the effective degrees of freedom $v$.<br/>
 For $v\rightarrow\infty$ we get $t_p(v) \rightarrow k_p$.</p>
-<p>See also Table G.2.</p>
+<p>See also <strong>Table G.2</strong> in the GUM document.</p>
 </div>
 </div>
 </div>
@@ -8199,8 +8200,7 @@ For $v\rightarrow\infty$ we get $t_p(v) \rightarrow k_p$.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># We can also define kp and find the confidence level</span>
-<span class="c1"># Again, with normal distribution as an example</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># We can also define tp and find the confidence level</span>
 <span class="n">tp</span> <span class="o">=</span> <span class="mf">2.86</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">v</span><span class="p">)</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="o">-</span><span class="n">tp</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
@@ -9152,7 +9152,7 @@ For $v\rightarrow\infty$ we get $t_p(v) \rightarrow k_p$.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'where the number following the symbol ± is the numerical value of </span><span class="se">\</span>
 <span class="s1">an expanded uncertainty U = k*uc, with U determined from a combined standard </span><span class="se">\</span>
 <span class="s1">uncertainty uc = </span><span class="si">{</span><span class="n">lu</span><span class="o">.</span><span class="n">s</span><span class="o">*</span><span class="mf">1e9</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1"> nm and a coverage factor k = </span><span class="si">{</span><span class="n">tp</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> based on </span><span class="se">\</span>
-<span class="s1">the t-distribution for v = </span><span class="si">{</span><span class="n">veff_final</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1"> degrees of freedom, and defines </span><span class="se">\</span>
+<span class="s1">the t-distribution for v = </span><span class="si">{</span><span class="n">df</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1"> degrees of freedom, and defines </span><span class="se">\</span>
 <span class="s1">an interval estimated to have a level of confidence of </span><span class="si">{</span><span class="n">p</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s1"> percent. </span><span class="se">\</span>
 <span class="s1">The corresponding relative expanded uncertainty is U/l = </span><span class="si">{</span><span class="n">lu_exp</span><span class="o">.</span><span class="n">s</span><span class="o">/</span><span class="n">lu</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="mf">1e6</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">*10^(-6)'</span><span class="p">)</span>
 </pre></div>
@@ -9168,25 +9168,8 @@ For $v\rightarrow\infty$ we get $t_p(v) \rightarrow k_p$.</p>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>l = (50.000838+/-0.000093) mm, 
+where the number following the symbol ± is the numerical value of an expanded uncertainty U = k*uc, with U determined from a combined standard uncertainty uc = 32 nm and a coverage factor k = 2.92 based on the t-distribution for v = 16 degrees of freedom, and defines an interval estimated to have a level of confidence of 99.0 percent. The corresponding relative expanded uncertainty is U/l = 1.9*10^(-6)
 </pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
-<span class="ansi-green-fg">      1</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">l = (</span><span style="color: rgb(175,0,0)">{</span><span style="color: rgb(175,0,0)">:.2u}) mm, </span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(98,98,98)">.</span>format(lu_exp<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">1e3</span>))
-<span class="ansi-green-fg">      2</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">where the number following the symbol ± is the numerical value of </span><span class="ansi-bold" style="color: rgb(175,95,0)">\</span>
-<span class="ansi-green-fg">      3</span> <span style="color: rgb(175,0,0)">an expanded uncertainty U = k*uc, with U determined from a combined standard </span><span class="ansi-bold" style="color: rgb(175,95,0)">\</span>
-<span class="ansi-green-fg">      4</span> <span style="color: rgb(175,0,0)">uncertainty uc = </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>lu<span style="color: rgb(98,98,98)">.</span>s<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">1e9</span><span class="ansi-bold" style="color: rgb(175,95,135)">:</span><span style="color: rgb(175,0,0)">.0f</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> nm and a coverage factor k = </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>tp<span class="ansi-bold" style="color: rgb(175,95,135)">:</span><span style="color: rgb(175,0,0)">.2f</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> based on </span><span class="ansi-bold" style="color: rgb(175,95,0)">\</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 5</span> <span style="color: rgb(175,0,0)">the t-distribution for v = </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span><span class="ansi-yellow-bg">veff_final</span><span class="ansi-bold" style="color: rgb(175,95,135)">:</span><span style="color: rgb(175,0,0)">.0f</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> degrees of freedom, and defines </span><span class="ansi-bold" style="color: rgb(175,95,0)">\</span>
-<span class="ansi-green-fg">      6</span> <span style="color: rgb(175,0,0)">an interval estimated to have a level of confidence of </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>p<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">100</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> percent. </span><span class="ansi-bold" style="color: rgb(175,95,0)">\</span>
-<span class="ansi-green-fg">      7</span> <span style="color: rgb(175,0,0)">The corresponding relative expanded uncertainty is U/l = </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>lu_exp<span style="color: rgb(98,98,98)">.</span>s<span style="color: rgb(98,98,98)">/</span>lu<span style="color: rgb(98,98,98)">.</span>n<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">1e6</span><span class="ansi-bold" style="color: rgb(175,95,135)">:</span><span style="color: rgb(175,0,0)">.1f</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">*10^(-6)</span><span style="color: rgb(175,0,0)">'</span>)
-
-<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name 'veff_final' is not defined</pre>
 </div>
 </div>
 </div>
@@ -9219,7 +9202,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [55]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Measurement values from Table H.2</span>
@@ -9236,7 +9219,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [56]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">uncertainties</span> <span class="kn">import</span> <span class="n">ufloat</span>
@@ -9250,7 +9233,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [57]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Type A uncertainties</span>
@@ -9262,12 +9245,12 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=af6d4ae4-58ab-4b1e-9d26-1f3aa7379d08">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=af6d4ae4-58ab-4b1e-9d26-1f3aa7379d08">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [58]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'V = (</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">Vu</span><span class="p">)</span><span class="si">}</span><span class="s1">) V'</span><span class="p">)</span>
@@ -9278,12 +9261,27 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8f65f212-8352-420b-b011-a6412322e7bd">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>V = (4.9990+/-0.0032) V
+I = (19.661+/-0.009) mA
+phi = (1.0445+/-0.0008) rad
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8f65f212-8352-420b-b011-a6412322e7bd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [59]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Correlation coefficients</span>
@@ -9300,6 +9298,21 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>r_VI: -0.36
+r_Vphi: 0.86
+r_Iphi: -0.65
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b35dd29b-cac7-4d37-8c71-6e9223bf0998">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -9311,12 +9324,12 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=53e02736-a4ef-44d1-b178-b1387dc5a032">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=53e02736-a4ef-44d1-b178-b1387dc5a032">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [60]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Alternatively provide the full correlation coefficient matrix using numpy</span>
@@ -9326,12 +9339,26 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[54], line 5</span>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[60]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>array([[ 1.        , -0.35531122,  0.85762421],
+       [-0.35531122,  1.        , -0.64511122],
+       [ 0.85762421, -0.64511122,  1.        ]])</pre>
+</div>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a8e1cd1e-836b-4292-b3ef-9765ae488cf2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [61]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Note that this is not the same as the covariance matrix!</span>
@@ -9358,7 +9385,7 @@ Here exemplary done for $Z = U/I$.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [62]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">uncertainties.umath</span> <span class="kn">import</span> <span class="o">*</span> 
@@ -9372,7 +9399,7 @@ Here exemplary done for $Z = U/I$.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [63]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">Zu</span> <span class="o">=</span> <span class="n">Vu</span><span class="o">/</span><span class="n">Iu</span> <span class="o">*</span> <span class="mf">1e3</span> <span class="c1"># in Ohms</span>
@@ -9381,16 +9408,29 @@ Here exemplary done for $Z = U/I$.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2354ec25-b861-42c6-abf1-7b64efc516fe">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2354ec25-b861-42c6-abf1-7b64efc516fe">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [64]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Z = ({:.3u}) Ohm (uncorrelated case)'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Zu</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Z = (254.260+/-0.204) Ohm (uncorrelated case)
+</pre>
 </div>
 </div>
 </div>
@@ -9418,12 +9458,12 @@ Here is the <em>manual</em> way for Z:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9abbbfa7-1348-472c-ac5c-37efd32932b7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9abbbfa7-1348-472c-ac5c-37efd32932b7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [65]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Manual calculation according to equation H.8c</span>
@@ -9435,12 +9475,24 @@ Here is the <em>manual</em> way for Z:</p>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[65]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>np.float64(0.000929506832076323)</pre>
+</div>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=bc5ad24c-03cb-48f9-b108-fe700c3766e0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [66]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">Z_u</span> <span class="o">=</span> <span class="n">Z_u_rel</span><span class="o">*</span><span class="n">Zu</span><span class="o">.</span><span class="n">n</span>
@@ -9449,16 +9501,28 @@ Here is the <em>manual</em> way for Z:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b9f2d692-5426-482c-a2d7-f4387cd87f48">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b9f2d692-5426-482c-a2d7-f4387cd87f48">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [67]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">Z_u</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[67]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>np.float64(0.23633613008237322)</pre>
 </div>
 </div>
 </div>
@@ -9468,7 +9532,7 @@ Here is the <em>manual</em> way for Z:</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [68]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">Zu</span> <span class="o">=</span> <span class="n">ufloat</span><span class="p">(</span><span class="n">Zu</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">Z_u</span><span class="p">)</span>
@@ -9477,16 +9541,29 @@ Here is the <em>manual</em> way for Z:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7ce15955-062a-457a-b3f1-8ddc6538683f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7ce15955-062a-457a-b3f1-8ddc6538683f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [69]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Zu = ({:.3u}) Ohm'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Zu</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Zu = (254.260+/-0.236) Ohm
+</pre>
 </div>
 </div>
 </div>
@@ -9519,7 +9596,7 @@ We only need the input values as numpy arrays and define all properties using <c
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [70]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">uncertainties</span>
@@ -9533,7 +9610,7 @@ We only need the input values as numpy arrays and define all properties using <c
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [71]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Define as correlated variables</span>
@@ -9548,12 +9625,12 @@ We only need the input values as numpy arrays and define all properties using <c
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8c7c0dca-3f6d-45fb-b3b1-63231f9c6ee2">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8c7c0dca-3f6d-45fb-b3b1-63231f9c6ee2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [72]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># These are the same as before</span>
@@ -9561,6 +9638,21 @@ We only need the input values as numpy arrays and define all properties using <c
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'I = (</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">Iu</span><span class="p">)</span><span class="si">}</span><span class="s1">) mA'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'phi = (</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">phiu</span><span class="p">)</span><span class="si">}</span><span class="s1">) rad'</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>V = (4.9990+/-0.0032) V
+I = (19.661+/-0.009) mA
+phi = (1.0445+/-0.0008) rad
+</pre>
 </div>
 </div>
 </div>
@@ -9581,7 +9673,7 @@ We only need the input values as numpy arrays and define all properties using <c
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [73]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Calculate R, X, and Z</span>
@@ -9593,12 +9685,12 @@ We only need the input values as numpy arrays and define all properties using <c
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=1cfaac5f-fa68-4ed9-826e-b9e30949694a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1cfaac5f-fa68-4ed9-826e-b9e30949694a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [74]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Print out values to compare with Table H.3</span>
@@ -9606,6 +9698,21 @@ We only need the input values as numpy arrays and define all properties using <c
 <span class="nb">print</span><span class="p">(</span><span class="s1">'X = ({:.3u}) Ohm'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Xu</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Z = ({:.3u}) Ohm'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Zu</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>R = (127.732+/-0.071) Ohm
+X = (219.847+/-0.296) Ohm
+Z = (254.260+/-0.236) Ohm
+</pre>
 </div>
 </div>
 </div>
@@ -9637,7 +9744,7 @@ We only need the input values as numpy arrays and define all properties using <c
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [75]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Measurement values from Table H.2</span>
@@ -9665,16 +9772,28 @@ We only need the input values as numpy arrays and define all properties using <c
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4f9565e2-58ac-4ae8-8fb0-64e116d1c9c7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4f9565e2-58ac-4ae8-8fb0-64e116d1c9c7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [76]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">R</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[76]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>array([0.12767249, 0.12789245, 0.12750626, 0.12771042, 0.12787654])</pre>
 </div>
 </div>
 </div>
@@ -9696,7 +9815,7 @@ We define them here as uncertainty ufloat for convenience and display, but we do
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [77]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Type A uncertainties</span>
@@ -9708,12 +9827,12 @@ We define them here as uncertainty ufloat for convenience and display, but we do
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=70b79a98-60fc-47f0-893c-4e0a3d3e6119">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=70b79a98-60fc-47f0-893c-4e0a3d3e6119">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [78]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Print out values to compare with Table H.3</span>
@@ -9721,6 +9840,21 @@ We define them here as uncertainty ufloat for convenience and display, but we do
 <span class="nb">print</span><span class="p">(</span><span class="s1">'X = ({:.3u}) Ohm'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Xu</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Z = ({:.3u}) Ohm'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Zu</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>R = (0.127732+/-0.000071) Ohm
+X = (0.219847+/-0.000295) Ohm
+Z = (0.254260+/-0.000236) Ohm
+</pre>
 </div>
 </div>
 </div>
@@ -9754,7 +9888,7 @@ Also, this requires that we have the same number of individual measurements for 
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [79]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Export environment to</span>
@@ -9765,18 +9899,32 @@ Also, this requires that we have the same number of individual measurements for 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=41b80173-5012-4186-94c2-f03865addd29">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=41b80173-5012-4186-94c2-f03865addd29">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [80]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Export notebook to html for quick inspection in a browser.</span>
 <span class="c1"># https://nbconvert.readthedocs.io/en/latest/usage.html</span>
 <span class="o">!</span>jupyter<span class="w"> </span>nbconvert<span class="w"> </span>--to<span class="w"> </span>html<span class="w"> </span>--theme<span class="w"> </span>light<span class="w"> </span>gum-uncertainty-calculation-python.ipynb
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>[NbConvertApp] Converting notebook gum-uncertainty-calculation-python.ipynb to html
+[NbConvertApp] Writing 416988 bytes to gum-uncertainty-calculation-python.html
+</pre>
 </div>
 </div>
 </div>
